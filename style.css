@@ -1,0 +1,735 @@
+/* ========================================
+   面積マスター ～単位へんかんチャレンジ～
+   メインスタイルシート
+   ======================================== */
+
+/* ---------- リセット & ベース ---------- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #6C63FF;
+  --primary-light: #8B83FF;
+  --secondary: #FF6B9D;
+  --accent: #00D2FF;
+  --success: #00C897;
+  --danger: #FF5757;
+  --warning: #FFB800;
+  --bg-gradient-1: #667eea;
+  --bg-gradient-2: #764ba2;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  --text-dark: #2D3436;
+  --text-light: #636E72;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --font: 'M PLUS Rounded 1c', sans-serif;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font);
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* 動く背景パターン */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(255,255,255,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(255,255,255,0.05) 0%, transparent 50%);
+  animation: bgPulse 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes bgPulse {
+  0% { opacity: 0.5; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+/* ---------- 画面切り替え ---------- */
+.screen {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* ---------- タイトル画面 ---------- */
+.title-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 50px 40px;
+  text-align: center;
+  box-shadow: var(--card-shadow);
+  max-width: 500px;
+  width: 100%;
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.title-icon {
+  font-size: 4rem;
+  margin-bottom: 10px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.title-card h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.unit-badges {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.badge {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+  transition: transform 0.2s;
+}
+
+.badge:hover {
+  transform: scale(1.1);
+}
+
+.level-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 15px;
+}
+
+.level-select {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.level-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.level-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.level-btn:hover::after {
+  left: 100%;
+}
+
+.level-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.level-btn:active {
+  transform: translateY(0);
+}
+
+.level-easy {
+  background: linear-gradient(135deg, #00C897, #00E5A0);
+}
+
+.level-normal {
+  background: linear-gradient(135deg, #FFB800, #FFC940);
+}
+
+.level-hard {
+  background: linear-gradient(135deg, #FF5757, #FF7878);
+}
+
+.level-star {
+  font-size: 1.1rem;
+  min-width: 50px;
+  text-align: left;
+}
+
+.level-name {
+  flex: 1;
+  text-align: left;
+}
+
+.level-desc {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+/* ---------- ゲーム画面 ---------- */
+#game-screen {
+  flex-direction: column;
+  padding: 20px;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.score-area {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.score-item {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.score-icon {
+  font-size: 1.1rem;
+}
+
+.score-label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.score-value {
+  font-size: 1.2rem;
+  min-width: 20px;
+  text-align: center;
+}
+
+.score-total {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  color: #fff;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.back-btn:hover {
+  background: rgba(255,255,255,0.35);
+  transform: translateY(-2px);
+}
+
+/* カード */
+.question-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 40px;
+  text-align: center;
+  box-shadow: var(--card-shadow);
+  max-width: 600px;
+  width: 100%;
+  animation: slideUp 0.5s ease-out;
+}
+
+.question-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+}
+
+.question-text {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--text-dark);
+  margin-bottom: 30px;
+  line-height: 1.4;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.answer-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.answer-input {
+  width: 200px;
+  padding: 14px 20px;
+  border: 3px solid #E0E0E0;
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-dark);
+  transition: all 0.3s;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.answer-input::-webkit-outer-spin-button,
+.answer-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.answer-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.15);
+}
+
+.answer-input.correct {
+  border-color: var(--success);
+  background: rgba(0, 200, 151, 0.05);
+  box-shadow: 0 0 0 4px rgba(0, 200, 151, 0.15);
+}
+
+.answer-input.wrong {
+  border-color: var(--danger);
+  background: rgba(255, 87, 87, 0.05);
+  box-shadow: 0 0 0 4px rgba(255, 87, 87, 0.15);
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-10px); }
+  80% { transform: translateX(10px); }
+}
+
+.answer-unit {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 14px 40px;
+  font-family: var(--font);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(108, 99, 255, 0.4);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+/* ヒント */
+.hint-area {
+  margin-top: 25px;
+}
+
+.hint-btn {
+  background: none;
+  border: 2px dashed #DDD;
+  border-radius: var(--radius-sm);
+  padding: 10px 24px;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-light);
+  transition: all 0.3s;
+}
+
+.hint-btn:hover {
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+.hint-box {
+  display: none;
+  margin-top: 15px;
+  padding: 18px;
+  background: linear-gradient(135deg, #FFF9E6, #FFF3CC);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: #856404;
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: left;
+  border-left: 4px solid var(--warning);
+}
+
+.hint-box.visible {
+  display: block;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 正解/不正解オーバーレイ */
+.result-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(5px);
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+}
+
+.result-overlay.visible {
+  display: flex;
+}
+
+.result-content {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 50px 40px;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.result-icon {
+  font-size: 5rem;
+  margin-bottom: 15px;
+}
+
+.result-text {
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.result-text.correct {
+  color: var(--success);
+}
+
+.result-text.wrong {
+  color: var(--danger);
+}
+
+.result-answer {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+.next-btn {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 14px 35px;
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
+}
+
+.next-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(108, 99, 255, 0.4);
+}
+
+/* ---------- 結果画面 ---------- */
+.result-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 50px 40px;
+  text-align: center;
+  box-shadow: var(--card-shadow);
+  max-width: 500px;
+  width: 100%;
+  animation: slideUp 0.6s ease-out;
+}
+
+.result-title-icon {
+  font-size: 4.5rem;
+  margin-bottom: 10px;
+}
+
+.result-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--text-dark);
+  margin-bottom: 25px;
+}
+
+.final-score {
+  margin-bottom: 20px;
+}
+
+.final-score-number {
+  font-size: 5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.final-score-label {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-top: 5px;
+}
+
+.final-message {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #F0F0FF, #E8E8FF);
+  color: var(--primary);
+}
+
+.final-streak {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 30px;
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.retry-btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 14px 30px;
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
+}
+
+.retry-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(108, 99, 255, 0.4);
+}
+
+.home-btn {
+  background: transparent;
+  border: 2px solid #DDD;
+  border-radius: var(--radius-sm);
+  padding: 12px 30px;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.home-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* ---------- 紙吹雪 ---------- */
+#confetti-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 200;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -20px;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(720deg);
+  }
+}
+
+/* ---------- レスポンシブ ---------- */
+@media (max-width: 600px) {
+  .title-card {
+    padding: 35px 25px;
+  }
+
+  .title-card h1 {
+    font-size: 2rem;
+  }
+
+  .question-card {
+    padding: 30px 20px;
+  }
+
+  .question-text {
+    font-size: 1.4rem;
+  }
+
+  .answer-input {
+    width: 150px;
+    font-size: 1.2rem;
+    padding: 12px 15px;
+  }
+
+  .score-area {
+    gap: 8px;
+  }
+
+  .score-item {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  .result-content {
+    padding: 35px 25px;
+  }
+
+  .final-score-number {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .title-card h1 {
+    font-size: 1.7rem;
+  }
+
+  .level-btn {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
+
+  .question-text {
+    font-size: 1.2rem;
+  }
+}
